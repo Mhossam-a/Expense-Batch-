@@ -84,6 +84,17 @@ bench --site <your-site> migrate
 - لا يمكن إلغاء الدفعة قبل إلغاء/حذف مطالباتها. بعد الإلغاء يعمل **Amend** وتبدأ الصفوف نظيفة.
 - الدفعات الكبيرة (أكثر من 15 مطالبة افتراضياً) تُنشأ في الخلفية مع شريط تقدم، ويلزم أن يعمل الـ worker.
 
+### حساب الدائنين: من يحدّده؟
+
+بالترتيب، الأعلى يغلب:
+
+1. **حساب مختار يدوياً** في Expense Claim: لا يغيّره التطبيق أبداً، حتى لو اختلف عن حساب نوع المصروف، ولا يمنع الجمع بين أنواع مختلفة.
+2. **Payable Account في الدفعة**: إن حددته تُرحَّل كل مطالبات الدفعة إليه (مناسب للحساب الوسيط الثابت). وتبقى المطالبات المولَّدة عليه حتى لو عُدّلت أسطرها.
+3. **حساب نوع المصروف** (Expense Claim Type ← Default Payable Account): يُملأ تلقائياً ويتبع النوع إن تغيّر.
+4. **حساب الشركة الافتراضي**: يُستخدم فقط إن فعّلت «الرجوع لحساب الشركة» في الإعدادات.
+
+حساب الشركة الافتراضي وحده (الذي يضعه HRMS على كل مطالبة جديدة) لا يُعدّ اختياراً يدوياً، فيستبدله حساب نوع المصروف.
+
 ### الصلاحيات
 
 المستخدم الذي يولّد المطالبات يحتاج صلاحية **إنشاء Expense Claim** (أدوار HR User و HR Manager تكفي)، لأن التطبيق ينشئها باسمه ولا يتجاوز الصلاحيات.
@@ -102,6 +113,7 @@ bench --site <your-site> migrate
 - `Expense Claim Detail.has_tax`, `item_tax_template`, `line_tax_amount`
 - `Expense Taxes and Charges.from_item_tax_template` (مخفي، يميّز الصفوف التي أضافها التطبيق)
 - `Expense Claim.expense_batch` (رابط للدفعة)
+- `Expense Claim.auto_payable_account` و `payable_account_pinned` (مخفيان، يميّزان الحساب الذي ملأه التطبيق عن الحساب المختار يدوياً)
 
 وأربعة DocTypes جديدة، وتعديلات `doc_events` على Expense Claim (قبل التحقق، قبل الإلغاء، عند الإلغاء، عند الحذف). لا يغيّر التطبيق شيئاً في كود HRMS نفسه.
 
@@ -123,7 +135,7 @@ bench --site <your-site> migrate
 - Tax is stored as an amount, grouped per account / cost center / project. Optional tax-inclusive entry; the claim total equals the invoice total to the cent.
 - Company filters everywhere: cost centers (ledger only), projects, tax templates, employees and expense types are limited to the document's company.
 - Attachment on a row is linked to its claim (same stored file, no duplicate on disk).
-- Payable account per Expense Claim Type per company, instead of one on the Company. Mixed types in one manual claim are rejected.
+- Payable account: pinned by hand on a claim > chosen on the batch > per Expense Claim Type (per company) > company default (optional). An account picked by hand is never overwritten.
 - *Split Map*: live preview of the claims before anything is created, with a proportional bar, per-claim cards and row-level problems.
 - Generation is savepoint-protected per claim; large batches run as a background job with live progress.
 - Generated rows are locked; deleting/cancelling a claim updates its batch row. Cancel and Amend work on batches.

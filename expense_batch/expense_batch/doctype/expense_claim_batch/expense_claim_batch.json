@@ -79,8 +79,8 @@
   }
  ],
  "doctype": "DocType",
- "creation": "2026-10-06 09:00:00.000000",
- "modified": "2026-10-06 09:00:00.000000",
+ "creation": "2026-10-07 09:00:00.000000",
+ "modified": "2026-10-07 09:00:00.000000",
  "modified_by": "Administrator",
  "owner": "Administrator",
  "docstatus": 0,
@@ -93,6 +93,7 @@
   "column_break_a",
   "default_cost_center",
   "default_project",
+  "payable_account",
   "column_break_b",
   "split_mode",
   "amounts_include_tax",
@@ -151,6 +152,14 @@
    "fieldtype": "Link",
    "label": "Default Project",
    "options": "Project",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "payable_account",
+   "fieldtype": "Link",
+   "label": "Payable Account",
+   "options": "Account",
+   "description": "Leave empty to use each expense type's payable account. When set, every claim of this batch is booked to this account.",
    "allow_on_submit": 1
   },
   {

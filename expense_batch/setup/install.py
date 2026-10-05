@@ -27,46 +27,30 @@ def get_custom_fields():
 		],
 		"Expense Claim Detail": [
 			{
-				"fieldname": "tax_section",
-				"label": "Tax",
-				"fieldtype": "Section Break",
-				"insert_after": "description",
-			},
-			{
 				"fieldname": "has_tax",
 				"label": "Has Tax",
 				"fieldtype": "Check",
-				"insert_after": "tax_section",
+				"insert_after": "description",
 				"in_list_view": 1,
 				"columns": 1,
 				"description": "Tick it when this invoice carries tax. The Item Tax Template then decides the accounts and rates.",
-			},
-			{
-				"fieldname": "tax_column",
-				"fieldtype": "Column Break",
-				"insert_after": "has_tax",
 			},
 			{
 				"fieldname": "item_tax_template",
 				"label": "Item Tax Template",
 				"fieldtype": "Link",
 				"options": "Item Tax Template",
-				"insert_after": "tax_column",
+				"insert_after": "has_tax",
 				"depends_on": "eval:doc.has_tax",
 				"in_list_view": 0,
 				"columns": 0,
-			},
-			{
-				"fieldname": "tax_amount_column",
-				"fieldtype": "Column Break",
-				"insert_after": "item_tax_template",
 			},
 			{
 				"fieldname": "line_tax_amount",
 				"label": "Tax Amount",
 				"fieldtype": "Currency",
 				"options": amount_options("Expense Claim Detail", "sanctioned_amount"),
-				"insert_after": "tax_amount_column",
+				"insert_after": "item_tax_template",
 				"read_only": 1,
 				"no_copy": 1,
 				"depends_on": "eval:doc.has_tax",
@@ -93,7 +77,27 @@ def get_custom_fields():
 				"no_copy": 1,
 				"in_standard_filter": 1,
 				"print_hide": 1,
-			}
+			},
+			{
+				"fieldname": "auto_payable_account",
+				"label": "Payable Account Filled by Expense Batch",
+				"fieldtype": "Data",
+				"insert_after": "payable_account",
+				"hidden": 1,
+				"read_only": 1,
+				"no_copy": 1,
+				"print_hide": 1,
+			},
+			{
+				"fieldname": "payable_account_pinned",
+				"label": "Payable Account Chosen Manually",
+				"fieldtype": "Check",
+				"insert_after": "auto_payable_account",
+				"hidden": 1,
+				"read_only": 1,
+				"no_copy": 1,
+				"print_hide": 1,
+			},
 		],
 	}
 
@@ -112,15 +116,30 @@ def ensure_doctypes():
 			frappe.reload_doc("expense_batch", "doctype", folder, force=True)
 
 
+OBSOLETE_FIELDS = {
+	"Expense Claim Detail": ["tax_section", "tax_column", "tax_amount_column"],
+}
+
+
+def remove_obsolete_fields():
+	for doctype, fieldnames in OBSOLETE_FIELDS.items():
+		for fieldname in fieldnames:
+			name = frappe.db.get_value("Custom Field", {"dt": doctype, "fieldname": fieldname})
+			if name:
+				frappe.delete_doc("Custom Field", name, force=True)
+
+
 def after_install():
 	ensure_doctypes()
 	create_custom_fields(get_custom_fields(), update=True)
+	remove_obsolete_fields()
 	frappe.clear_cache()
 
 
 def after_migrate():
 	ensure_doctypes()
 	create_custom_fields(get_custom_fields(), update=True)
+	remove_obsolete_fields()
 
 
 def before_uninstall():

@@ -120,6 +120,12 @@ def _create_claim(batch, group):
 	claim.company = batch.company
 	claim.posting_date = group["posting_date"]
 	claim.payable_account = group["payable_account"]
+	if group["payable_source"] == "type":
+		# derived from the expense type: later edits of the lines may re-derive it
+		claim.auto_payable_account = group["payable_account"]
+	else:
+		# chosen on the batch (or the company): keep it whatever the lines say
+		claim.payable_account_pinned = 1
 	claim.expense_batch = batch.name
 	claim.remark = _remark(batch, group)
 

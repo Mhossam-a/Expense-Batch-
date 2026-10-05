@@ -150,3 +150,9 @@ Not permitted,غير مسموح
 Used for every row that has no employee of its own.,يُستخدم لكل سطر ليس له موظف خاص.
 Used for rows without one. Falls back to the company's default cost center.,يُستخدم للصفوف التي بلا مركز تكلفة. وإلا يؤخذ مركز تكلفة الشركة.
 Tick it when this invoice carries tax. The Item Tax Template then decides the accounts and rates.,حدّدها إن كانت الفاتورة عليها ضريبة. وقالب الضريبة يحدد الحسابات والنسب.
+"Leave empty to use each expense type's payable account. When set, every claim of this batch is booked to this account.",اتركه فارغاً ليُستخدم حساب الدائنين لكل نوع مصروف. وإذا حددته تُرحَّل كل مطالبات هذه الدفعة إليه.
+Payable Account {0} does not exist,حساب الدائنين {0} غير موجود
+"Payable Account {0} belongs to {1}, not {2}",حساب الدائنين {0} يتبع {1} وليس {2}
+Payable Account {0} is a group account. Choose a ledger account.,حساب الدائنين {0} حساب مجموعة. اختر حساباً فرعياً.
+"No payable account for {0} in {1}. Choose a Payable Account on the batch, set one on the Expense Claim Type, or allow the company default in Expense Batch Settings.",لا يوجد حساب دائنين للنوع {0} في {1}. اختر حساب دائنين في الدفعة، أو حدده في نوع المصروف، أو فعّل حساب الشركة الافتراضي في إعدادات دفعات المصروفات.
+You need permission to delete Expense Claims to undo a generation.,تحتاج صلاحية حذف مطالبات المصروفات للتراجع عن الإنشاء.

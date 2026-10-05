@@ -73,11 +73,23 @@ def expense_types_for_company(doctype, txt, searchfield, start, page_len, filter
 
 
 @frappe.whitelist()
-def resolve_payable(expense_types, company):
-	"""Payable account for the expense types on a claim, or the reason they clash."""
+def resolve_payable(expense_types, company, current=None, auto=None, pinned=0):
+	"""Payable account for the expense types on a claim, or the reason they clash.
+
+	`current`, `auto` and `pinned` describe the account already on the claim, so an
+	account somebody chose on purpose is reported as pinned and left alone."""
 	frappe.has_permission("Expense Claim", "read", throw=True)
 	if not cint(payable.get_settings().apply_to_manual_claims):
-		return {"account": None, "conflict": None}
+		return {"account": None, "conflict": None, "pinned": False}
+
+	values = {"payable_account": current, "auto_payable_account": auto, "payable_account_pinned": cint(pinned)}
+	if payable.is_pinned(values, company):
+		return {"account": None, "conflict": None, "pinned": True}
+
 	types = {t for t in (frappe.parse_json(expense_types) or []) if t}
 	account, conflicts = payable.resolve_for_types(types, company)
-	return {"account": account, "conflict": payable.conflict_message(conflicts) if conflicts else None}
+	return {
+		"account": account,
+		"conflict": payable.conflict_message(conflicts) if conflicts else None,
+		"pinned": False,
+	}

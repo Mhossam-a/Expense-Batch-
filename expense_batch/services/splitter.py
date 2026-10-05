@@ -180,15 +180,15 @@ def _validate_row(info, batch, settings, employee_cache):
 				)
 			)
 		info.payable_account, info.payable_source = payable.resolve_payable_account(
-			info.expense_type, company, settings
+			info.expense_type, company, settings, batch.get("payable_account")
 		)
 		if not info.payable_account:
 			issues.append(
 				_issue(
 					"error",
-					_("No payable account for {0} in {1}. Set it on the Expense Claim Type.").format(
-						info.expense_type, company
-					),
+					_(
+						"No payable account for {0} in {1}. Choose a Payable Account on the batch, set one on the Expense Claim Type, or allow the company default in Expense Batch Settings."
+					).format(info.expense_type, company),
 				)
 			)
 

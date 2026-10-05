@@ -103,6 +103,14 @@ def sync_tax_rows(doc):
 
 
 def sync_payable_account(doc, settings=None):
+	"""Fill the payable account from the expense types, unless someone pinned one."""
+	if not doc.get("payable_account"):
+		doc.payable_account_pinned = 0
+
+	if payable.is_pinned(doc, doc.company):
+		doc.payable_account_pinned = 1
+		return
+
 	types = {r.expense_type for r in doc.get("expenses") or [] if r.expense_type}
 	if not types or not doc.company:
 		return
@@ -112,6 +120,8 @@ def sync_payable_account(doc, settings=None):
 		frappe.throw(payable.conflict_message(conflicts), title=_("Different payable accounts"))
 	if account:
 		doc.payable_account = account
+		doc.auto_payable_account = account
+		doc.payable_account_pinned = 0
 
 
 def before_cancel(doc, method=None):

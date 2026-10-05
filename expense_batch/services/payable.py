@@ -34,15 +34,41 @@ def get_type_expense_account(expense_type, company):
 	)
 
 
-def resolve_payable_account(expense_type, company, settings=None):
-	"""(account, source) where source is 'type', 'company' or None."""
+def get_company_default(company):
+	return frappe.get_cached_value("Company", company, "default_expense_claim_payable_account") if company else None
+
+
+def is_pinned(values, company):
+	"""True when someone chose this claim's payable account on purpose.
+
+	The app only ever overwrites an account it filled in itself (remembered in
+	`auto_payable_account`), an empty one, or the plain company default that HRMS
+	puts on every new claim. Anything else, for instance an intermediate account
+	picked by hand, is left exactly as it is.
+	"""
+	current = values.get("payable_account")
+	if not current:
+		return False
+	if cint(values.get("payable_account_pinned")):
+		return True
+	if current == values.get("auto_payable_account"):
+		return False
+	return current != get_company_default(company)
+
+
+def resolve_payable_account(expense_type, company, settings=None, override=None):
+	"""(account, source) where source is 'batch', 'type', 'company' or None.
+
+	An account chosen on the batch itself wins over everything else."""
+	if override:
+		return override, "batch"
 	account = get_type_payable_account(expense_type, company)
 	if account:
 		return account, "type"
 
 	settings = settings or get_settings()
 	if cint(settings.fallback_to_company_payable):
-		account = frappe.get_cached_value("Company", company, "default_expense_claim_payable_account")
+		account = get_company_default(company)
 		if account:
 			return account, "company"
 	return None, None

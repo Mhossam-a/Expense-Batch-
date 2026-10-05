@@ -26,6 +26,7 @@ frappe.ui.form.on("Expense Claim Batch", {
 		}));
 		frm.set_query("default_cost_center", by_company({ is_group: 0 }));
 		frm.set_query("default_project", by_company({}));
+		frm.set_query("payable_account", by_company({ report_type: "Balance Sheet", account_type: "Payable", is_group: 0 }));
 		frm.set_query("default_employee", by_company({ status: "Active" }));
 	},
 
@@ -82,6 +83,10 @@ frappe.ui.form.on("Expense Claim Batch", {
 	},
 
 	default_cost_center(frm) {
+		EB.refreshMap(frm, 200);
+	},
+
+	payable_account(frm) {
 		EB.refreshMap(frm, 200);
 	},
 });

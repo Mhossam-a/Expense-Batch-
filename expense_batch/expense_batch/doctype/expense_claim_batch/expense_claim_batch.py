@@ -28,6 +28,7 @@ LOCKED_FIELDS = (
 class ExpenseClaimBatch(Document):
 	def validate(self):
 		self.set_company()
+		self.validate_payable_account()
 		self.restore_system_fields()
 		self.prepare_rows()
 		self.set_totals()
@@ -55,6 +56,7 @@ class ExpenseClaimBatch(Document):
 			)
 
 	def before_update_after_submit(self):
+		self.validate_payable_account()
 		self.restore_system_fields()
 		self.validate_locked_rows()
 		self.prepare_rows()
@@ -77,6 +79,19 @@ class ExpenseClaimBatch(Document):
 			)
 
 	# ------------------------------------------------------------ helpers
+
+	def validate_payable_account(self):
+		if not self.payable_account:
+			return
+		info = frappe.db.get_value("Account", self.payable_account, ["company", "is_group"], as_dict=True)
+		if not info:
+			frappe.throw(_("Payable Account {0} does not exist").format(self.payable_account))
+		if info.company != self.company:
+			frappe.throw(
+				_("Payable Account {0} belongs to {1}, not {2}").format(self.payable_account, info.company, self.company)
+			)
+		if info.is_group:
+			frappe.throw(_("Payable Account {0} is a group account. Choose a ledger account.").format(self.payable_account))
 
 	def set_company(self):
 		if not self.company:

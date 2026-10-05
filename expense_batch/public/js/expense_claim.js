@@ -21,15 +21,7 @@
 				query: "expense_batch.api.expense_types_for_company",
 				filters: { company: frm.doc.company },
 			}));
-		},
-
-		refresh(frm) {
-			if (!frm.doc.expense_batch) return;
-			const link = `<a href="/app/expense-claim-batch/${encodeURIComponent(frm.doc.expense_batch)}">${frappe.utils.escape_html(
-				frm.doc.expense_batch
-			)}</a>`;
-			frm.dashboard.set_headline(__("Created from batch {0}", [link]));
-		},
+		}
 	});
 
 	frappe.ui.form.on("Expense Claim Detail", {
@@ -135,13 +127,24 @@
 
 		frappe.call({
 			method: "expense_batch.api.resolve_payable",
-			args: { expense_types: types, company: frm.doc.company },
+			args: {
+				expense_types: types,
+				company: frm.doc.company,
+				current: frm.doc.payable_account,
+				auto: frm.doc.auto_payable_account,
+				pinned: frm.doc.payable_account_pinned ? 1 : 0,
+			},
 			callback: (r) => {
 				const out = r.message || {};
+				// an account chosen by hand is never replaced
+				if (out.pinned) return;
+
 				if (out.conflict) {
 					frappe.msgprint({ title: __("Different payable accounts"), message: out.conflict, indicator: "orange" });
 				} else if (out.account && out.account !== frm.doc.payable_account) {
 					frm.set_value("payable_account", out.account);
+					frm.set_value("auto_payable_account", out.account);
+					frm.set_value("payable_account_pinned", 0);
 				}
 			},
 		});
