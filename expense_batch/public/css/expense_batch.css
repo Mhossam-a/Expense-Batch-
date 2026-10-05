@@ -1,0 +1,403 @@
+/*
+ * Expense Batch - Split Map
+ *
+ * Built on Frappe's own colour tokens so it follows the site theme. State colours:
+ *   ready    green     the claim can be created
+ *   warn     amber     it will be created, but check the note
+ *   blocked  red       a row must be fixed first
+ *   done     blue      the claim already exists
+ * Logical properties (inline-start/end) keep it correct in Arabic (RTL) too.
+ */
+
+.eb-map {
+	--eb-ready: var(--green-600, #2f855a);
+	--eb-warn: var(--orange-500, #c97a12);
+	--eb-blocked: var(--red-500, #d63b3b);
+	--eb-done: var(--blue-600, #2f6fb0);
+	--eb-line: var(--border-color, #e2e6ea);
+	--eb-muted: var(--text-muted, #6b7785);
+	--eb-surface: var(--card-bg, #fff);
+	--eb-wash: var(--subtle-fg, #f6f7f9);
+	font-variant-numeric: tabular-nums;
+	color: var(--text-color, #1f2933);
+}
+
+.eb-map *,
+.eb-map *::before,
+.eb-map *::after {
+	box-sizing: border-box;
+}
+
+/* ---- summary line + split mode ------------------------------------ */
+
+.eb-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 12px 24px;
+	margin-bottom: 12px;
+}
+
+.eb-headline {
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.eb-subline {
+	margin: 2px 0 0;
+	font-size: 12px;
+	color: var(--eb-muted);
+}
+
+.eb-modes {
+	display: inline-flex;
+	border: 1px solid var(--eb-line);
+	border-radius: 6px;
+	background: var(--eb-surface);
+	overflow: hidden;
+}
+
+.eb-mode {
+	appearance: none;
+	margin: 0;
+	padding: 6px 12px;
+	border: 0;
+	border-inline-end: 1px solid var(--eb-line);
+	background: transparent;
+	color: var(--eb-muted);
+	font: inherit;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.eb-mode:last-child {
+	border-inline-end: 0;
+}
+
+.eb-mode:hover:not(:disabled) {
+	background: var(--eb-wash);
+	color: var(--text-color, #1f2933);
+}
+
+.eb-mode.is-active {
+	background: var(--text-color, #1f2933);
+	color: var(--eb-surface);
+	font-weight: 600;
+}
+
+.eb-mode:disabled {
+	cursor: default;
+	opacity: 0.6;
+}
+
+.eb-map button:focus-visible,
+.eb-map summary:focus-visible,
+.eb-map a:focus-visible {
+	outline: 2px solid var(--eb-done);
+	outline-offset: 2px;
+}
+
+/* ---- the split bar: the whole batch, divided into its claims ------- */
+
+.eb-bar {
+	display: flex;
+	gap: 2px;
+	height: 28px;
+	margin: 0 0 8px;
+}
+
+.eb-seg {
+	appearance: none;
+	flex-basis: 0;
+	min-width: 8px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 3px;
+	background: var(--eb-ready);
+	cursor: pointer;
+}
+
+.eb-seg--warn {
+	background: var(--eb-warn);
+}
+
+.eb-seg--done {
+	background: var(--eb-done);
+}
+
+.eb-seg--blocked {
+	background: repeating-linear-gradient(
+		-45deg,
+		var(--eb-blocked) 0,
+		var(--eb-blocked) 4px,
+		transparent 4px,
+		transparent 7px
+	);
+	border: 1px solid var(--eb-blocked);
+}
+
+.eb-seg:hover,
+.eb-seg.is-lit {
+	filter: brightness(0.82);
+}
+
+.eb-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 16px;
+	margin: 0 0 16px;
+	padding: 0;
+	list-style: none;
+	font-size: 12px;
+	color: var(--eb-muted);
+}
+
+.eb-legend li {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.eb-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--eb-ready);
+}
+
+.eb-dot--warn {
+	background: var(--eb-warn);
+}
+
+.eb-dot--done {
+	background: var(--eb-done);
+}
+
+.eb-dot--blocked {
+	background: var(--eb-blocked);
+}
+
+/* ---- live progress ------------------------------------------------- */
+
+.eb-progress {
+	margin: 0 0 16px;
+	padding: 10px 12px;
+	border: 1px solid var(--eb-line);
+	border-radius: 6px;
+	background: var(--eb-wash);
+	font-size: 12px;
+}
+
+.eb-progress-track {
+	height: 6px;
+	margin-top: 8px;
+	border-radius: 3px;
+	background: var(--eb-line);
+	overflow: hidden;
+}
+
+.eb-progress-fill {
+	height: 100%;
+	background: var(--eb-ready);
+	transition: width 0.25s ease;
+}
+
+/* ---- claim tickets -------------------------------------------------- */
+
+.eb-section-title {
+	margin: 20px 0 6px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--eb-muted);
+}
+
+.eb-ticket {
+	margin: 0 0 6px;
+	border: 1px solid var(--eb-line);
+	border-inline-start: 4px solid var(--eb-ready);
+	border-radius: 6px;
+	background: var(--eb-surface);
+}
+
+.eb-ticket--warn {
+	border-inline-start-color: var(--eb-warn);
+}
+
+.eb-ticket--done {
+	border-inline-start-color: var(--eb-done);
+}
+
+.eb-ticket--blocked {
+	border-inline-start-color: var(--eb-blocked);
+}
+
+.eb-ticket.is-lit {
+	box-shadow: 0 0 0 2px var(--eb-done);
+}
+
+.eb-ticket > summary {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 2px 16px;
+	padding: 10px 12px;
+	list-style: none;
+	cursor: pointer;
+}
+
+.eb-ticket > summary::-webkit-details-marker {
+	display: none;
+}
+
+.eb-ticket > summary:hover {
+	background: var(--eb-wash);
+}
+
+.eb-who {
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.eb-meta {
+	grid-column: 1;
+	font-size: 12px;
+	color: var(--eb-muted);
+}
+
+.eb-sum {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	align-self: center;
+	text-align: end;
+}
+
+.eb-sum strong {
+	display: block;
+	font-size: 14px;
+}
+
+.eb-sum small {
+	color: var(--eb-muted);
+}
+
+.eb-body {
+	padding: 0 12px 10px;
+	border-top: 1px solid var(--eb-line);
+}
+
+.eb-rows {
+	width: 100%;
+	margin: 8px 0 0;
+	border-collapse: collapse;
+	font-size: 12px;
+}
+
+.eb-rows th {
+	padding: 4px 8px;
+	font-weight: 500;
+	color: var(--eb-muted);
+	text-align: start;
+	border-bottom: 1px solid var(--eb-line);
+}
+
+.eb-rows td {
+	padding: 5px 8px;
+	border-bottom: 1px solid var(--eb-line);
+	vertical-align: top;
+}
+
+.eb-rows tr:last-child td {
+	border-bottom: 0;
+}
+
+.eb-num {
+	text-align: end;
+	white-space: nowrap;
+}
+
+.eb-issues {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 12px;
+}
+
+.eb-issues li {
+	display: flex;
+	gap: 8px;
+	padding: 2px 0;
+}
+
+.eb-issues .is-warn {
+	color: var(--eb-warn);
+}
+
+.eb-issues .is-error {
+	color: var(--eb-blocked);
+}
+
+.eb-link {
+	appearance: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--eb-done);
+	font: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.eb-state {
+	display: inline-block;
+	padding: 1px 8px;
+	border-radius: 10px;
+	background: var(--eb-wash);
+	font-size: 11px;
+	color: var(--eb-muted);
+}
+
+.eb-state--submitted {
+	background: color-mix(in srgb, var(--eb-ready) 14%, transparent);
+	color: var(--eb-ready);
+}
+
+.eb-state--cancelled {
+	background: color-mix(in srgb, var(--eb-blocked) 12%, transparent);
+	color: var(--eb-blocked);
+}
+
+.eb-empty {
+	padding: 20px 4px;
+	color: var(--eb-muted);
+}
+
+@media (max-width: 640px) {
+	.eb-ticket > summary {
+		grid-template-columns: 1fr;
+	}
+	.eb-sum {
+		grid-column: 1;
+		grid-row: auto;
+		text-align: start;
+	}
+	.eb-modes {
+		width: 100%;
+	}
+	.eb-mode {
+		flex: 1;
+		padding-inline: 6px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.eb-progress-fill {
+		transition: none;
+	}
+}

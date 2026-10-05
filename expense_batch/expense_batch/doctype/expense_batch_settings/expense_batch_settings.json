@@ -1,0 +1,117 @@
+{
+ "name": "Expense Batch Settings",
+ "issingle": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "HR User",
+   "read": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1
+  }
+ ],
+ "doctype": "DocType",
+ "creation": "2026-10-06 09:00:00.000000",
+ "modified": "2026-10-06 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "engine": "InnoDB",
+ "module": "Expense Batch",
+ "field_order": [
+  "payable_section",
+  "fallback_to_company_payable",
+  "apply_to_manual_claims",
+  "checks_section",
+  "warn_duplicates",
+  "require_attachment",
+  "generation_section",
+  "background_threshold",
+  "defaults_section",
+  "company_defaults"
+ ],
+ "fields": [
+  {
+   "fieldname": "payable_section",
+   "fieldtype": "Section Break",
+   "label": "Payable Account"
+  },
+  {
+   "fieldname": "fallback_to_company_payable",
+   "fieldtype": "Check",
+   "label": "Fall back to the Company's default payable account",
+   "default": "0",
+   "description": "Off: every Expense Claim Type must carry its own payable account (Expense Claim Type > Accounts). On: types without one use the account set on the Company."
+  },
+  {
+   "fieldname": "apply_to_manual_claims",
+   "fieldtype": "Check",
+   "label": "Also apply to Expense Claims entered by hand",
+   "default": "1",
+   "description": "Fills the payable account from the expense type and blocks claims that mix types posting to different payable accounts."
+  },
+  {
+   "fieldname": "checks_section",
+   "fieldtype": "Section Break",
+   "label": "Checks"
+  },
+  {
+   "fieldname": "warn_duplicates",
+   "fieldtype": "Check",
+   "label": "Warn about possible duplicate expenses",
+   "default": "1"
+  },
+  {
+   "fieldname": "require_attachment",
+   "fieldtype": "Check",
+   "label": "Require an attachment on every invoice row",
+   "default": "0"
+  },
+  {
+   "fieldname": "generation_section",
+   "fieldtype": "Section Break",
+   "label": "Generation"
+  },
+  {
+   "fieldname": "background_threshold",
+   "fieldtype": "Int",
+   "label": "Run in the background above this many claims",
+   "default": "15",
+   "description": "Smaller batches are generated immediately; larger ones run as a background job with a live progress bar."
+  },
+  {
+   "fieldname": "defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Default tax template per company"
+  },
+  {
+   "fieldname": "company_defaults",
+   "fieldtype": "Table",
+   "label": "Company Defaults",
+   "options": "Expense Batch Company Default",
+   "description": "Ticking Has Tax on an invoice row (in a batch or in an Expense Claim) fills in the template of that company."
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "links": []
+}

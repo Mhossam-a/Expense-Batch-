@@ -1,0 +1,219 @@
+{
+ "name": "Expense Claim Batch Detail",
+ "istable": 1,
+ "editable_grid": 1,
+ "track_changes": 0,
+ "permissions": [],
+ "doctype": "DocType",
+ "creation": "2026-10-06 09:00:00.000000",
+ "modified": "2026-10-06 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "engine": "InnoDB",
+ "module": "Expense Batch",
+ "field_order": [
+  "expense_date",
+  "employee",
+  "invoice_reference",
+  "column_break_a",
+  "expense_type",
+  "amount",
+  "tax_section",
+  "has_tax",
+  "item_tax_template",
+  "column_break_b",
+  "net_amount",
+  "tax_amount",
+  "accounting_section",
+  "cost_center",
+  "column_break_c",
+  "project",
+  "details_section",
+  "description",
+  "column_break_d",
+  "attachment",
+  "result_section",
+  "row_status",
+  "generated_claim",
+  "column_break_e",
+  "error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "expense_date",
+   "fieldtype": "Date",
+   "label": "Expense Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "in_list_view": 1,
+   "columns": 2,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "invoice_reference",
+   "fieldtype": "Data",
+   "label": "Invoice Reference",
+   "in_list_view": 1,
+   "columns": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expense_type",
+   "fieldtype": "Link",
+   "label": "Expense Type",
+   "options": "Expense Claim Type",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Invoice Amount",
+   "options": "Company:company:default_currency",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "tax_section",
+   "fieldtype": "Section Break",
+   "label": "Tax"
+  },
+  {
+   "fieldname": "has_tax",
+   "fieldtype": "Check",
+   "label": "Has Tax",
+   "in_list_view": 1,
+   "columns": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "item_tax_template",
+   "fieldtype": "Link",
+   "label": "Item Tax Template",
+   "options": "Item Tax Template",
+   "depends_on": "eval:doc.has_tax",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_b",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net_amount",
+   "fieldtype": "Currency",
+   "label": "Net Amount",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "label": "Tax Amount",
+   "options": "Company:company:default_currency",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "accounting_section",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_c",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_d",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "result_section",
+   "fieldtype": "Section Break",
+   "label": "Result"
+  },
+  {
+   "fieldname": "row_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nGenerated\nFailed\nCancelled",
+   "default": "Pending",
+   "read_only": 1,
+   "no_copy": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "generated_claim",
+   "fieldtype": "Link",
+   "label": "Expense Claim",
+   "options": "Expense Claim",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "column_break_e",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "Message",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "links": []
+}

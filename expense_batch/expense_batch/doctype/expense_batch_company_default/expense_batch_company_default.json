@@ -1,0 +1,43 @@
+{
+ "name": "Expense Batch Company Default",
+ "istable": 1,
+ "editable_grid": 1,
+ "permissions": [],
+ "doctype": "DocType",
+ "creation": "2026-10-06 09:00:00.000000",
+ "modified": "2026-10-06 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "engine": "InnoDB",
+ "module": "Expense Batch",
+ "field_order": [
+  "company",
+  "default_item_tax_template"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "default_item_tax_template",
+   "fieldtype": "Link",
+   "label": "Default Item Tax Template",
+   "options": "Item Tax Template",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 6
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "links": []
+}

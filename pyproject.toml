@@ -1,0 +1,19 @@
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "expense_batch"
+authors = [
+    { name = "Mhossam-a", email = "mohammedhossam168@gmail.com" }
+]
+description = "Enter many invoices at once and split them into separate Expense Claims, with per-line tax, attachments and a payable account per expense type."
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = []
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<17.0.0"
+erpnext = ">=15.0.0,<17.0.0"
+hrms = ">=15.0.0,<17.0.0"

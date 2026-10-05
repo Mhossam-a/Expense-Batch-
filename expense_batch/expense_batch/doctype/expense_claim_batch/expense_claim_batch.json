@@ -1,0 +1,306 @@
+{
+ "name": "Expense Claim Batch",
+ "is_submittable": 1,
+ "autoname": "format:EXPB-{YYYY}-{#####}",
+ "track_changes": 1,
+ "allow_import": 1,
+ "search_fields": "company,generation_status",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "doctype": "DocType",
+ "creation": "2026-10-06 09:00:00.000000",
+ "modified": "2026-10-06 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "engine": "InnoDB",
+ "module": "Expense Batch",
+ "field_order": [
+  "company",
+  "default_employee",
+  "column_break_a",
+  "default_cost_center",
+  "default_project",
+  "column_break_b",
+  "split_mode",
+  "amounts_include_tax",
+  "use_expense_date_as_posting_date",
+  "map_section",
+  "split_map",
+  "invoices_section",
+  "details",
+  "summary_section",
+  "total_rows",
+  "generated_rows",
+  "failed_rows",
+  "column_break_c",
+  "total_net",
+  "total_tax",
+  "grand_total",
+  "column_break_d",
+  "generation_status",
+  "remarks",
+  "amended_from",
+  "is_processing",
+  "processing_since"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "remember_last_selected_value": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "default_employee",
+   "fieldtype": "Link",
+   "label": "Default Employee",
+   "options": "Employee",
+   "description": "Used for every row that has no employee of its own.",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_cost_center",
+   "fieldtype": "Link",
+   "label": "Default Cost Center",
+   "options": "Cost Center",
+   "description": "Used for rows without one. Falls back to the company's default cost center.",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "default_project",
+   "fieldtype": "Link",
+   "label": "Default Project",
+   "options": "Project",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_b",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "split_mode",
+   "fieldtype": "Select",
+   "label": "Split Mode",
+   "options": "Each Row\nEmployee + Date\nEmployee",
+   "default": "Each Row",
+   "description": "Each Row: one claim per invoice. Employee + Date: invoices of the same employee on the same day share a claim. Employee: one claim per employee.",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amounts_include_tax",
+   "fieldtype": "Check",
+   "label": "Invoice amounts include tax",
+   "description": "On: the amount you type is the invoice total and the tax is taken out of it. Off: tax is added on top."
+  },
+  {
+   "fieldname": "use_expense_date_as_posting_date",
+   "fieldtype": "Check",
+   "label": "Use the expense date as the claim's posting date",
+   "default": "1",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "map_section",
+   "fieldtype": "Section Break",
+   "label": "Split Map"
+  },
+  {
+   "fieldname": "split_map",
+   "fieldtype": "HTML",
+   "label": "Split Map"
+  },
+  {
+   "fieldname": "invoices_section",
+   "fieldtype": "Section Break",
+   "label": "Invoices"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Invoices",
+   "options": "Expense Claim Batch Detail",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "summary_section",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "total_rows",
+   "fieldtype": "Int",
+   "label": "Invoices",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "generated_rows",
+   "fieldtype": "Int",
+   "label": "Generated",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "failed_rows",
+   "fieldtype": "Int",
+   "label": "Failed",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "column_break_c",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_net",
+   "fieldtype": "Currency",
+   "label": "Total Before Tax",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_tax",
+   "fieldtype": "Currency",
+   "label": "Total Tax",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Total Payable",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_d",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "generation_status",
+   "fieldtype": "Select",
+   "label": "Generation Status",
+   "options": "Pending\nProcessing\nPartly Generated\nGenerated\nFailed",
+   "default": "Pending",
+   "read_only": 1,
+   "no_copy": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Expense Claim Batch",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "is_processing",
+   "fieldtype": "Check",
+   "label": "Is Processing",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "processing_since",
+   "fieldtype": "Datetime",
+   "label": "Processing Since",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "links": []
+}
